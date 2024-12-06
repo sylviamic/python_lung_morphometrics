@@ -8,10 +8,10 @@ version = "0.1.0"
 description = "A set of tools for measuring MLI and the like."
 readme = "README.rst"
 authors = [
-  {name = "Sylvia Michki", email = "sylvia.michki@gmail.com"}
+  {name = "Sylvia N. Michki", email = "sylvia.michki@gmail.com"}
 ]
 maintainers = [
-  {name = "Sylvia Michki", email = "sylvia.michki@gmail.com"}
+  {name = "Sylvia N. Michki", email = "sylvia.michki@gmail.com"}
 ]
 classifiers = [
   "Programming Language :: Python",

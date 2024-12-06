@@ -47,8 +47,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'python lung morphometrics'
-copyright = "2024, Sylvia Michki"
-author = "Sylvia Michki"
+copyright = "2024, Sylvia N. Michki"
+author = "Sylvia N. Michki"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -129,7 +129,7 @@ latex_elements = {
 latex_documents = [
     (master_doc, 'python_lung_morphometrics.tex',
      'python lung morphometrics Documentation',
-     'Sylvia Michki', 'manual'),
+     'Sylvia N. Michki', 'manual'),
 ]
 
 
