@@ -3,6 +3,7 @@
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
+import colorcet as cc
 
 from skimage.filters import threshold_otsu
 import skimage
@@ -59,7 +60,6 @@ def do_mli(
     -------  
 
     ret: mean of chord lengths in um
-    
     '''
 
     # load the image and do the thresholding
@@ -102,16 +102,24 @@ def do_mli(
             label_img[mask] = 0
     
     # Plot the resultant images
+    ## Setup the subplots depending on if images 
+    ## are vertical or horizontal
     figure_scale = 8
     if (orig_img.shape[1] < orig_img.shape[0]):
-        figsize_x, figsize_y = (figure_scale * orig_img.shape[1] / orig_img.shape[0], figure_scale)
+        figsize_x, figsize_y = (
+            figure_scale * orig_img.shape[1] / orig_img.shape[0],
+            figure_scale
+        )
     else:
-        figsize_x, figsize_y = (figure_scale, figure_scale * orig_img.shape[0] / orig_img.shape[1])
+        figsize_x, figsize_y = (
+            figure_scale, 
+            figure_scale * orig_img.shape[0] / orig_img.shape[1]
+        )
     
     fig, axs = plt.subplots(
         2,2,
         figsize=(figsize_x, figsize_y),
-        gridspec_kw = {"wspace": 0.1, "hspace": 0.1}
+        gridspec_kw = {"wspace": 0.2, "hspace": 0.2}
     )
     
     axs[0,0].imshow(orig_img)
@@ -123,7 +131,7 @@ def do_mli(
     axs[1,0].imshow(global_otsu, cmap=plt.cm.gray)
     axs[1,0].set_title("threshold-global-otsu")
 
-    axs[1,1].imshow(label_img, cmap=plt.cm.terrain_r, vmin=0)
+    axs[1,1].imshow(label_img, cmap=cc.cm.glasbey_cool)
     axs[1,1].set_title("chords")
 
     for a in axs.ravel():
@@ -133,11 +141,12 @@ def do_mli(
     
     # save the image
     if (save_pic):
-        if not (os.path.exists(os.path.join(img_path, save_dir))):
-            os.makedirs(os.path.join(img_path, save_dir))
-        fig.savefig(os.path.join(
-            img_path, save_dir, img_filename.split(".")[0] + "_output.png"
-        ), dpi=150)
+        if not (os.path.exists(save_dir)):
+            os.makedirs(save_dir)
+        fig.savefig(
+            os.path.join(save_dir, img_filename.replace(img_ext, "_output.png")), 
+            dpi=150
+        )
     
     # return the mean length
     return np.mean(ret)
@@ -176,6 +185,43 @@ def measure_chords(
             continue
         
     return chord_lengths, label_img
+
+def get_tiff_resolution(
+    img_filename: str,
+):
+    '''
+    Given the path to a tiff file, 
+    read the metadata to determine
+    the resolution of the image
+    in pixels per um. 
+
+    Parameters
+    ----------
+
+    img_filename
+        The full path to the tiff image
+
+    Returns
+    -------
+
+    res: float
+        The number of pixels per um
+        for the given image
+    '''
+
+    # get the image metadata
+    with tifffile.TiffFile(img_filename) as tif:
+        for page in tif.pages:
+            for tag in page.tags:
+                if ("XResolution" in tag.name):
+                    # XResolution is a tuple (numerator, denominator)
+                    # and is usually given in pixels per cm, not um
+                    res = tag.value[0] / tag.value[1]
+                    res /= 1e4 #cm to um
+                    return res
+    if not res:
+        raise ValueError("XResolution not found in tiff metadata.") 
+
 
 def make_thresholded_images(
     img_filename: str,
@@ -225,18 +271,11 @@ def make_thresholded_images(
     img_ext = "." + img_filename.split(".")[-1]
     
     img = skimage.img_as_ubyte(
-        imageio.v2.imread(img_path + "/" + img_filename)
+        imageio.v2.imread(os.path.join(img_path, img_filename))
     )
     
     # get the image metadata
-    with tifffile.TiffFile(img_path + "/" + img_filename) as tif:
-        for page in tif.pages:
-            for tag in page.tags:
-                if ("XResolution" in tag.name):
-                    # XResolution is a tuple (numerator, denominator)
-                    # and is usually given in pixels per cm, not um
-                    res = tag.value[0] / tag.value[1]
-                    res /= 1e4 #cm to um
+    res = get_tiff_resolution(os.path.join(img_path, img_filename))
 
     # copy for plotting
     orig_img = img.copy()
@@ -244,7 +283,7 @@ def make_thresholded_images(
     # convert to grey
     img = skimage.color.rgb2gray(img)
     
-    # correct black pixels (masked)
+    # correct black pixels (masked by user in image editor)
     img[img == 0] = np.mean(img[img > 0])
     
     # blur a little
@@ -282,7 +321,6 @@ def make_chord_image(
 
     Parameters
     ----------
-
     img
         The thresholded H&E image.
 
@@ -292,12 +330,10 @@ def make_chord_image(
     
     Returns
     -------
-
     chords: np.ndarray (np.bool)
         An np.ndarray matching the shape
         of the rescaled, thresholded H&E image
         containing chords.
-
     '''
 
     chords = np.zeros_like(img, dtype=bool)

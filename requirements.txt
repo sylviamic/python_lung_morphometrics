@@ -4,6 +4,6 @@ matplotlib
 imageio
 tifffile
 tqdm
-joblib
+colorcet
 
 typer
