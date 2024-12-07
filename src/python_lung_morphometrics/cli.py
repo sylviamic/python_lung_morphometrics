@@ -24,7 +24,9 @@ def do_mli(
     '''
     Given the filename of an H&E image,
     measure mean chord lengths. Prints results
-    to console.   
+    to console. 
+
+    Output is to standard out: `filename\t MIL(um)`
     '''
 
     ret = _do_mli(

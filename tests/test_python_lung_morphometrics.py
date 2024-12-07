@@ -3,22 +3,22 @@
 """Tests for `python_lung_morphometrics` package."""
 
 import pytest
-
+import os
 
 from python_lung_morphometrics import python_lung_morphometrics
 
+img_filename = os.path.join("tests", "data", "2086_20X_DISTAL6_ch00.tif")
 
 @pytest.fixture
-def response():
-    """Sample pytest fixture.
-
-    See more at: http://doc.pytest.org/en/latest/fixture.html
-    """
-    # import requests
-    # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
+def do_mli():
+    return python_lung_morphometrics.do_mli(
+        img_filename
+    )
 
 
-def test_content(response):
-    """Sample pytest test function with the pytest fixture as an argument."""
-    # from bs4 import BeautifulSoup
-    # assert 'GitHub' in BeautifulSoup(response.content).title.string
+def test_do_mli(do_mli):
+    # Act
+    res = do_mli
+
+    # Assert
+    assert ((res > 5) and (res < 300))
