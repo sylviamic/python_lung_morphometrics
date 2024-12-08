@@ -19,7 +19,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+#sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
 
 import python_lung_morphometrics
 
@@ -139,7 +140,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     (master_doc, 'python_lung_morphometrics',
-     'python lung morphometrics Documentation',
+     'python lung morphometrics documentation',
      [author], 1)
 ]
 
@@ -151,10 +152,10 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'python_lung_morphometrics',
-     'python lung morphometrics Documentation',
+     'python lung morphometrics documentation',
      author,
      'python_lung_morphometrics',
-     'One line description of project.',
+     'Tools for calculating MLI and the like.',
      'Miscellaneous'),
 ]
 
