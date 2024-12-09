@@ -10,3 +10,5 @@ typer
 
 pytest
 tox
+build
+twine

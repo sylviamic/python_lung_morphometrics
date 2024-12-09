@@ -68,4 +68,3 @@ warn_no_return = true
 module = "tests.*"
 allow_untyped_defs = true
 disable_error_code = "attr-defined"
-

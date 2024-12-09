@@ -12,3 +12,6 @@ sphinx-book-theme
 pydata-sphinx-theme
 
 pytest==6.2.4
+
+build
+twine

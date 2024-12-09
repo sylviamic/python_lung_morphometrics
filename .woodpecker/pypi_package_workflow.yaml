@@ -1,0 +1,17 @@
+when:
+  - event: tag
+    branch: master
+
+steps:
+  - name: package
+    image: python:latest
+    environment:
+      PYPI_API_KEY: 
+        from_secret: test_pypi_api_key
+    commands:
+      - echo "Packaging..."
+      - git clone https://github.com/sylviamic/python_lung_morphometrics
+      - cd python_lung_morphometrics
+      - pip install -r requirements.txt
+      - make dist
+      - python -m twine upload --username __token__ --password $PYPI_API_KEY --repository testpypi --verbose dist/*
