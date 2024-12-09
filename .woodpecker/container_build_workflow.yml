@@ -6,8 +6,7 @@ steps:
   - name: build
     image: woodpeckerci/plugin-docker-buildx
     settings:
-      registry: hub.docker.com # and push it to some registry
-      repo: $DOCKERHUB_AUTH_USERNAME/python_lung_morphometrics
+      repo: sylviamic/python_lung_morphometrics
       tags: latest
       username:
         from_secret: dockerhub_auth_username
