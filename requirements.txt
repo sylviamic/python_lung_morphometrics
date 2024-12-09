@@ -7,3 +7,6 @@ tqdm
 colorcet
 
 typer
+
+pytest
+tox
