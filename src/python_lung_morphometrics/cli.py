@@ -1,5 +1,5 @@
 """Console script for python_lung_morphometrics."""
-from .python_lung_morphometrics import do_mli as _do_mli
+from python_lung_morphometrics import do_mli as _do_mli
 
 import typer
 from rich.console import Console
@@ -9,7 +9,12 @@ console = Console()
 
 @app.command()
 def main():
-    consol.print("dummy output")
+    '''
+    Dummy function.
+    :meta private:
+    '''
+
+    console.print("dummy output")
 
 @app.command()
 def do_mli(
@@ -27,6 +32,8 @@ def do_mli(
     to console. 
 
     Output is to standard out: `filename\t MIL(um)`
+
+    :meta private:
     '''
 
     ret = _do_mli(

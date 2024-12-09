@@ -30,9 +30,9 @@ dev = [
 ]
 
 [project.urls]
-bugs = "https://github.com/nigeil/python_lung_morphometrics/issues"
-changelog = "https://github.com/nigeil/python_lung_morphometrics/blob/master/changelog.md"
-homepage = "https://github.com/nigeil/python_lung_morphometrics"
+bugs = "https://github.com/sylviamic/python_lung_morphometrics/issues"
+changelog = "https://github.com/sylviamic/python_lung_morphometrics/blob/master/changelog.md"
+homepage = "https://github.com/sylviamic/python_lung_morphometrics"
 
 [project.scripts]
 python-lung-morphometrics = "python_lung_morphometrics.cli:app"
@@ -46,8 +46,11 @@ package-dir = {"" = "src"}
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
 
-
-
+[tool.pytest.ini_options]
+pythonpath = "src"
+addopts = [
+    "--import-mode=importlib",
+]
 
 # Mypy
 # ----

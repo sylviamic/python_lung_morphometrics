@@ -5,13 +5,17 @@
 import pytest
 import os
 
-from python_lung_morphometrics import python_lung_morphometrics
+from python_lung_morphometrics.python_lung_morphometrics import do_mli as _do_mli
 
-img_filename = os.path.join("tests", "data", "2086_20X_DISTAL6_ch00.tif")
+img_filename = os.path.join(
+    "tests", 
+    "data", 
+    "2086_20X_DISTAL6_ch00.tif"
+)
 
 @pytest.fixture
 def do_mli():
-    return python_lung_morphometrics.do_mli(
+    return _do_mli(
         img_filename
     )
 

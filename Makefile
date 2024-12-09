@@ -55,7 +55,8 @@ lint/flake8: ## check style with flake8
 lint: lint/flake8 ## check style
 
 test: ## run tests quickly with the default Python
-	pytest
+	python -m pytest --disable-warnings tests
+#	pytest
 
 test-all: ## run tests on every Python version with tox
 	tox
