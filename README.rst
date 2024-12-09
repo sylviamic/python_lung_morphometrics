@@ -9,7 +9,7 @@ Status
 ------
 
 .. image:: https://woodpecker.sylviamichki.xyz/api/badges/1/status.svg
-   :target: https://woodpecker.sylviamichki.xyz/api/badges/1/status.svg
+   :target: https://woodpecker.sylviamichki.xyz/repos/1
 
 Installation
 ------------

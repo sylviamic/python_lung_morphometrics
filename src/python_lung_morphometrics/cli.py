@@ -1,5 +1,5 @@
 """Console script for python_lung_morphometrics."""
-from python_lung_morphometrics import do_mli as _do_mli
+from .python_lung_morphometrics import do_mli as _do_mli
 
 import typer
 from rich.console import Console

@@ -1,8 +1,8 @@
-Welcome to python lung morphometrics's documentation!
-=====================================================
+python lung morphometrics's
+===========================
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 3
    :caption: Contents:
 
    readme
