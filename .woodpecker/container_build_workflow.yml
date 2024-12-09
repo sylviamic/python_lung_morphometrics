@@ -9,6 +9,7 @@ steps:
       registry: hub.docker.com # and push it to some registry
       repo: $DOCKERHUB_AUTH_USERNAME/python_lung_morphometrics
       tags: latest
-      username: $DOCKERHUB_AUTH_USERNAME
-      password: $DOCKERHUB_AUTH_TOKEN
-    secrets: [ dockerhub_auth_username, dockerhub_auth_token ]
+      username:
+        from_secret: dockerhub_auth_username
+      password:
+        from_secret: dockerhub_auth_token
