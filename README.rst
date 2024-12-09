@@ -2,12 +2,27 @@
 python lung morphometrics
 =========================
 
+A python module for performing morphometric measurements
+on microscopy images of lung tissue. 
 
-A set of tools for measuring MLI and the like.
+Status
+------
+
+.. image:: https://woodpecker.sylviamichki.xyz/api/badges/1/status.svg
+   :target: https://woodpecker.sylviamichki.xyz/api/badges/1/status.svg
+
+Installation
+------------
+
+.. code-block:: console
+
+    $ git clone git://github.com/sylviamic/python_lung_morphometrics
+    $ cd python_lung_morphometrics
+    $ pip install -U .
 
 
-Features
---------
+CLI usage
+---------
 
 * Measure the mean linear intercept (MLI) of one image and print results to console::
 
