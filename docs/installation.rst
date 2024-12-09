@@ -25,8 +25,8 @@ need for re-installation. Useful for debugging and prototyping
 new functionality.
 
 
-.. _Github repo: https://github.com/nigeil/python_lung_morphometrics
-.. _tarball: https://github.com/nigeil/python_lung_morphometrics/tarball/master
+.. _Github repo: https://github.com/sylviamic/python_lung_morphometrics
+.. _tarball: https://github.com/sylviamic/python_lung_morphometrics/tarball/master
 
 
 Stable release (coming soon!)
