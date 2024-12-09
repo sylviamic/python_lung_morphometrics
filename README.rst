@@ -11,6 +11,14 @@ Status
 .. image:: https://woodpecker.sylviamichki.xyz/api/badges/1/status.svg
    :target: https://woodpecker.sylviamichki.xyz/repos/1
 
+Run it in a container
+---------------------
+
+.. code-block:: console
+
+    $ docker run -v ./data:/data docker.io/sylviamic/python_lung_morphometrics:latest do-mli /data/image_001.tif
+
+
 Installation
 ------------
 

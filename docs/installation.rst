@@ -4,6 +4,17 @@
 Installation
 ============
 
+Using a container
+-----------------
+
+Run the CLI in a (docker) container. Be sure to mount 
+the directory that holds your data into the container using the
+appropriate command-line flag (:code:`-v ./your/local_path:/path_inside_container`):
+
+.. code-block:: console
+
+    $ docker run -v ./tests/data:/data docker.io/sylviamic/python_lung_morphometrics:latest do-mli /data/image_001.tif
+
 From sources
 ------------
 
