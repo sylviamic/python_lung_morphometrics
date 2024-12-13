@@ -20,10 +20,12 @@ def main():
 def do_mli(
     filename: str,
     save_pic: bool = True,
+    save_chords: bool = False,
     save_dir: str = "output",
-    min_chord_length: float = 3.0,
+    min_chord_length: float = 2.0,
     max_chord_length: float = 500.0,
-    max_image_length: int = 3500
+    max_image_length: int = 4000,
+    lateral_resolution: float = None
 ):
 
     '''
@@ -31,18 +33,18 @@ def do_mli(
     measure mean chord lengths. Prints results
     to console. 
 
-    Output is to standard out: `filename\t MIL(um)`
-
-    :meta private:
+    Output to console: `filename\t MLI(um)`
     '''
 
     ret = _do_mli(
         filename,
         save_pic,
         save_dir,
+        save_chords,
         min_chord_length,
         max_chord_length,
-        max_image_length
+        max_image_length, 
+        lateral_resolution
     )
 
     console.print(
