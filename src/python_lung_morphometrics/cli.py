@@ -21,10 +21,10 @@ def do_mli(
     filename: str,
     save_pic: bool = True,
     save_chords: bool = False,
-    save_dir: str = "output",
+    save_dir: str = "do_mli_output",
     min_chord_length: float = 2.0,
     max_chord_length: float = 500.0,
-    max_image_length: int = 4000,
+    max_image_length: int = 5000,
     lateral_resolution: float = None
 ):
 

@@ -16,11 +16,11 @@ import os
 def do_mli(
     img_filename, 
     save_pic = True,
-    save_dir = "output",
+    save_dir = "do_mli_output",
     save_chords = False,
     min_chord_length = 2.0,
     max_chord_length = 500.0,
-    max_image_length = 4000,
+    max_image_length = 5000,
     lateral_resolution = None
 ):
     '''
@@ -37,9 +37,8 @@ def do_mli(
     img_file: str
         The path to the image file
     
-    save_dir: str (default: "chord_length_measurement_output")
-        The subdirectory (under the parent directory of `img_file`)
-        to store output images in
+    save_dir: str (default: "do_mli_output")
+        The directory to store output images in
     
     save_pic: bool (default: True)
         Will save intermediate images to file
@@ -55,7 +54,7 @@ def do_mli(
         Maximum length of chord, as for 
         `min_chord_length`
     
-    max_image_length: int (default: 4000)
+    max_image_length: int (default: 5000)
         Maximum length (in pixels) of either axis of
         the input image; images with an axis greater than
         this length will be rescaled down to fit
@@ -280,7 +279,7 @@ def get_tiff_resolution(
 
 def make_thresholded_images(
     img_filename: str,
-    max_image_length: int = 3500
+    max_image_length: int = 5000
 ):
     '''
     Load an H&E image from a file,
@@ -295,7 +294,7 @@ def make_thresholded_images(
     img_filename
         Path to the original H&E image.
 
-    max_image_length
+    max_image_length: int (default: 5000)
         Maximum length (in pixels) of either axis of
         the input image; images with an axis greater
         than this length will be rescaled down to fit
