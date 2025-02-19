@@ -176,7 +176,7 @@ def do_colocalization_analysis(
 
     dpi: int (default: 450)
         DPI of output images
-    
+
     save_dir: str (default: "output")
         Path to save the output tables/images to. Defaults to ./output, a 
         subdirectory of the current working directory which will be created
@@ -254,6 +254,8 @@ def do_colocalization_analysis(
     )
 
     if (save_table):
+        if not (os.path.exists(save_dir)):
+            os.makedirs(save_dir)
         df.to_csv(
             os.path.join(
                 save_dir,
