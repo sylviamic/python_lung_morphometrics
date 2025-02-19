@@ -1,10 +1,12 @@
 numpy
+pandas
 scikit-image
+scikit-learn
 matplotlib
 imageio
 tifffile
+imagecodecs
 tqdm
-colorcet
 
 typer
 

@@ -56,13 +56,15 @@ lint: lint/flake8 ## check style
 
 test: ## run tests quickly with the default Python
 	python -m pytest --disable-warnings tests
-#	pytest
+
+test-failing: ## run tests quickly with the default Python
+	python -m pytest --disable-warnings --last-failed tests
 
 test-all: ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source python_lung_morphometrics -m pytest
+	coverage run --source src/python_lung_morphometrics -m pytest
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
@@ -70,7 +72,7 @@ coverage: ## check code coverage quickly with the default Python
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/python_lung_morphometrics.rst
 	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ src/python_lung_morphometrics
+	sphinx-apidoc -o docs/ src/python_lung_morphometrics src/python_lung_morphometrics/*cli*
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
@@ -87,3 +89,9 @@ dist: clean ## builds source and wheel package
 
 install: clean ## install the package to the active Python's site-packages
 	pip install -e .
+
+install-ci: clean ## install the package to the active Python's site-packages
+	pip install --index-url http://devpi-server:3141/root/pypi --trusted-host devpi-server --no-cache-dir -e .
+
+install-local: clean ## install the package to the active Python's site-packages
+	pip install --index-url http://10.0.0.1:3141/root/pypi --trusted-host 10.0.0.1 -e .

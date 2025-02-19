@@ -160,5 +160,13 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
+# -- Options for skipping some outputs ---------------------------------
+"""
+def skip_submodules(app, what, name, obj, skip, options):
+    if (what == "module"):
+        skip = True
+    return skip
 
-
+def setup(sphinx):
+    sphinx.connect("autodoc-skip-member", skip_submodules)
+"""

@@ -111,3 +111,6 @@ ENV/
 # sample outputs
 output/
 data/
+clustered/
+do_mli_output/
+do_colocalization_analysis_output/

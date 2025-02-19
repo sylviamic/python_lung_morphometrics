@@ -4,14 +4,6 @@ python\_lung\_morphometrics package
 Submodules
 ----------
 
-python\_lung\_morphometrics.cli module
---------------------------------------
-
-.. automodule:: python_lung_morphometrics.cli
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 python\_lung\_morphometrics.python\_lung\_morphometrics module
 --------------------------------------------------------------
 

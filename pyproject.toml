@@ -28,6 +28,9 @@ dev = [
     "pytest",  # testing
     "ruff"  # linting
 ]
+cellpose = [
+    "cellpose"
+]
 
 [project.urls]
 bugs = "https://github.com/sylviamic/python_lung_morphometrics/issues"
