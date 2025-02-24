@@ -1,5 +1,5 @@
 when: 
-  - event: [push,tag]
+  - event: [push]
     branch: master
 
 steps:
