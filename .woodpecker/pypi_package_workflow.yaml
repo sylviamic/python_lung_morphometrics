@@ -4,7 +4,7 @@ when:
 
 steps:
   - name: package
-    image: sylviamic/python_lung_morphometrics:${CI_COMMIT_TAG}
+    image: sylviamic/python_lung_morphometrics:latest
     environment:
       PYPI_API_KEY: 
         from_secret: pypi_api_key
