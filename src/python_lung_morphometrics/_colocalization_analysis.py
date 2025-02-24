@@ -202,9 +202,10 @@ def do_colocalization_analysis(
     nuc_img = np.take(img, nucleus_channel_idx, axis=channel_axis)
     if (nuc_seg_img_filename):
         # load pre-generated nuclei segmentation mask
-        nuc_seg_img = skimage.img_as_uint(
-            imageio.v3.imread(nuc_seg_img_filename)
-        )
+        #nuc_seg_img = skimage.img_as_uint(
+        #    imageio.v3.imread(nuc_seg_img_filename)
+        #)
+        nuc_seg_img = imageio.v3.imread(nuc_seg_img_filename)
         nuc_thresh_img = nuc_seg_img > 0
     elif (use_cellpose and has_cellpose_library):
         # generate nuclei segmentation mask with cellpose
@@ -270,7 +271,7 @@ def do_colocalization_analysis(
         figure_scale = 4
         n_rows = 3
         n_cols = img.shape[channel_axis]
-        cmap = plt.cm.Grays_r
+        cmap = plt.cm.Greys_r
         figsize_x, figsize_y = 3*n_rows, n_cols*figure_scale
         fig, axs = plt.subplots(
             n_rows, n_cols,
