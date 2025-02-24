@@ -4,7 +4,7 @@ scikit-image
 scikit-learn
 matplotlib
 imageio
-tifffile
+tifffile>=2025.2.18
 imagecodecs
 tqdm
 
