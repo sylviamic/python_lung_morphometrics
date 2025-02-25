@@ -4,12 +4,13 @@ when:
 
 steps:
   - name: package
-    image: sylviamic/python_lung_morphometrics:latest
+    image: python:latest
     environment:
       PYPI_API_KEY: 
         from_secret: pypi_api_key
     commands:
       - echo "Packaging..."
+      - git clone https://github.com/sylviamic/python_lung_morphometrics.git
       - cd /python_lung_morphometrics
       - make dist
       - python -m twine upload --username __token__ --password $PYPI_API_KEY --repository pypi --verbose dist/*
