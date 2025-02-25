@@ -7,8 +7,8 @@ steps:
     image: woodpeckerci/plugin-docker-buildx
     settings:
       repo: sylviamic/python_lung_morphometrics
-      auto_tag: true
-      #tags: latest
+      #auto_tag: true
+      tags: latest
       username:
         from_secret: dockerhub_auth_username
       password:
