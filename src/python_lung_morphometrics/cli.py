@@ -2,8 +2,11 @@
 Console script for python_lung_morphometrics.
 """
 
-from ._do_mli import do_mli as _do_mli
-from ._colocalization_analysis import do_colocalization_analysis as _do_colocalization_analysis
+#from ._do_mli import do_mli as _do_mli
+#from ._colocalization_analysis import do_colocalization_analysis as _do_colocalization_analysis
+
+import _do_mli 
+import _colocalization_analysis
 
 import typer
 from rich.console import Console
@@ -39,7 +42,7 @@ def do_mli(
     Output to console: `filename\t MLI(um)`
     """
 
-    ret = _do_mli(
+    ret = _do_mli._do_mli(
         filename,
         save_pic,
         save_dir,
@@ -79,7 +82,7 @@ def do_colocalization_analysis(
     Output to console: results table (pd.DataFrame)
     """
 
-    ret = _do_colocalization_analysis(
+    ret = _colocalization_analysis._do_colocalization_analysis(
         filename,
         nuc_seg_img_filename,
         use_cellpose,

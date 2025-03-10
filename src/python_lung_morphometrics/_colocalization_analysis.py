@@ -192,9 +192,8 @@ def do_colocalization_analysis(
     """
 
     # load the image
-    img = skimage.img_as_ubyte(
-        imageio.v3.imread(img_filename)
-    )  
+    img = imageio.v3.imread(img_filename)
+
     img_ext = "." + img_filename.split(".")[-1]
 
     n_axes = len(img.shape)
@@ -267,7 +266,6 @@ def do_colocalization_analysis(
         )
 
     if (save_intermediate_images):
-
         figure_scale = 4
         n_rows = 3
         n_cols = img.shape[channel_axis]

@@ -15,6 +15,7 @@ def do_mli(
     min_chord_length = 2.0,
     max_chord_length = 500.0,
     max_image_length = 5000,
+    channel_axis = None,
     lateral_resolution = None
 ):
     """
@@ -54,6 +55,9 @@ def do_mli(
         this length will be rescaled down to fit
         for computational efficiency
     
+    channel_axis: int (default: 0)
+        Axis corresponding to color channels.
+
     lateral_resolution: float (default: None)
         Override for the lateral resolution detection.
         Provide number of pixels per micrometer.
@@ -72,8 +76,15 @@ def do_mli(
 
     res, orig_img, img, global_otsu = _make_thresholded_images(
         os.path.join(img_path, img_filename),
-        max_image_length
+        max_image_length,
+        channel_axis = channel_axis
     )
+
+    if not (channel_axis):
+        if (len(orig_img.shape) < 3):
+            raise ValueError(f"Image too small to contain channel axis! {img.shape}")
+        else:
+            channel_axis = np.argmin(orig_img.shape)
     
     # override if provided by user
     # TODO: warn user by printing to stderr?
@@ -91,7 +102,7 @@ def do_mli(
     )
     
     # measure the chords
-    label_start = 0
+    label_start = 1
         
     chord_lengths, chord_x_coords, chord_y_coords, label_img = _measure_chords(
         chords,
@@ -112,16 +123,17 @@ def do_mli(
         # Plot the resultant images
         ## Setup the subplots depending on if images 
         ## are vertical or horizontal
+        xy_axes = [i for i in [0,1,2] if (i != channel_axis)]
         figure_scale = 8
-        if (orig_img.shape[1] < orig_img.shape[0]):
+        if (orig_img.shape[xy_axes[1]] < orig_img.shape[xy_axes[0]]):
             figsize_x, figsize_y = (
-                figure_scale * orig_img.shape[1] / orig_img.shape[0],
+                figure_scale * orig_img.shape[xy_axes[1]] / orig_img.shape[xy_axes[0]],
                 figure_scale
             )
         else:
             figsize_x, figsize_y = (
                 figure_scale, 
-                figure_scale * orig_img.shape[0] / orig_img.shape[1]
+                figure_scale * orig_img.shape[xy_axes[0]] / orig_img.shape[xy_axes[1]]
             )
         
         fig, axs = plt.subplots(

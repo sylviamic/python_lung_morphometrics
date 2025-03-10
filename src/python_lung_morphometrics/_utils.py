@@ -47,7 +47,8 @@ def _get_tiff_resolution(
 def _make_thresholded_images(
     img_filename: str,
     max_image_length: int = 10000,
-    greyscale: bool = True
+    greyscale: bool = True,
+    channel_axis: int = None,
 ):
     """
     Load an H&E image from a file,
@@ -73,6 +74,11 @@ def _make_thresholded_images(
         If False, `img` will be reshaped, but will maintain
         its color axis.
 
+    channel_axis: int (default: None)
+        The axis corresponding to color channels after loading
+        with `imagio.v3.imread(f)`. If None, will determine
+        based on axis shapes (smallest axis is channel axis).
+
     Returns
     -------
     
@@ -93,10 +99,16 @@ def _make_thresholded_images(
 
     # load the image from disk
     
-    img = skimage.img_as_ubyte(
-        imageio.v2.imread(img_filename)
-    )
+    img = imageio.v3.imread(img_filename)
     
+    if not (channel_axis):
+        if (len(img.shape) < 3):
+            raise ValueError(f"Image too small to contain channel axis! {img.shape}, {img_filename}")
+        else:
+            channel_axis = np.argmin(img.shape)
+
+    #img = np.moveaxis(img, 0, -1)
+
     # get the image metadata
     res = _get_tiff_resolution(img_filename)
 
@@ -105,38 +117,39 @@ def _make_thresholded_images(
     
     # convert to grey
     if (greyscale):
-        img = skimage.color.rgb2gray(img)
-        img[img == 0] = np.mean(img[img > 0])
+        grey_img = skimage.color.rgb2gray(img, channel_axis=channel_axis)
+        grey_img[grey_img == 0] = np.mean(grey_img[grey_img > 0])
     
         # blur a little
-        img = skimage.filters.gaussian(img, sigma=3)
+        grey_img = skimage.filters.gaussian(grey_img, sigma=3)
 
         # if image is too big, scale it down
         scale_factor = 1
-        max_input_img_axis_length = np.max(img.shape)
+        max_input_img_axis_length = np.max(grey_img.shape)
         if (max_input_img_axis_length > max_image_length):
             scale_factor = max_image_length / max_input_img_axis_length
-            img = skimage.transform.rescale(
-                img, 
+            grey_img = skimage.transform.rescale(
+                grey_img, 
                 scale=scale_factor, 
-                anti_aliasing=False
+                anti_aliasing=False,
             )
             res *= scale_factor 
         
         # adjust for under-exposure/under-saturation
-        img = skimage.exposure.equalize_adapthist(img)
+        grey_img = skimage.exposure.equalize_adapthist(grey_img)
         
         # otsu
-        threshold_global_otsu = threshold_otsu(img)
-        global_otsu = (img >= threshold_global_otsu)
+        threshold_global_otsu = threshold_otsu(grey_img)
+        global_otsu = (grey_img >= threshold_global_otsu)
 
-        return res, orig_img, img, global_otsu
+        return res, orig_img, grey_img, global_otsu
     
-    else:    
-        grey_img = skimage.color.rgb2gray(img)
+    else: 
+        # use grey_img only for thresholding
+        grey_img = skimage.color.rgb2gray(img, channel_axis=channel_axis)
 
         # blur a little
-        img = skimage.filters.gaussian(img, sigma=3, channel_axis=2)
+        img = skimage.filters.gaussian(img, sigma=3, channel_axis=channel_axis)
 
         # if image is too big, scale it down
         scale_factor = 1
@@ -147,12 +160,12 @@ def _make_thresholded_images(
                 img, 
                 scale=scale_factor, 
                 anti_aliasing=False,
-                channel_axis=2
+                channel_axis=channel_axis
             )
             grey_img = skimage.transform.rescale(
                 grey_img, 
                 scale=scale_factor, 
-                anti_aliasing=False
+                anti_aliasing=False,
             )
             res *= scale_factor 
         
