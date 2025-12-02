@@ -4,16 +4,15 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import imageio
+import os
+
 has_cellpose_library = False
 try:
     from cellpose import models
     has_cellpose_library = True
 except ImportError as e:
-    pass
-
-import imageio
-import tifffile
-import os
+    print("cellpose library not found: " + str(e))
 
 def _threshold_signal(signal_img):
     smooth = skimage.filters.gaussian(signal_img, sigma=1)

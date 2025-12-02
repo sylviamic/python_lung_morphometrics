@@ -7,6 +7,7 @@ imageio
 tifffile>=2025.2.18
 imagecodecs
 tqdm
+skops
 
 typer
 

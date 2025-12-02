@@ -10,7 +10,7 @@ from ._utils import (
 def do_mli(
     img_filename, 
     save_pic = True,
-    save_dir = "do_mli_output",
+    save_dir = "output",
     save_chords = False,
     min_chord_length = 2.0,
     max_chord_length = 500.0,

@@ -7,6 +7,7 @@ Console script for python_lung_morphometrics.
 
 import _do_mli 
 import _colocalization_analysis
+import _he_lung_injury_classification
 
 import typer
 from rich.console import Console
@@ -27,7 +28,7 @@ def do_mli(
     filename: str,
     save_pic: bool = True,
     save_chords: bool = False,
-    save_dir: str = "do_mli_output",
+    save_dir: str = "output",
     min_chord_length: float = 2.0,
     max_chord_length: float = 500.0,
     max_image_length: int = 5000,
@@ -42,7 +43,7 @@ def do_mli(
     Output to console: `filename\t MLI(um)`
     """
 
-    ret = _do_mli._do_mli(
+    ret = _do_mli.do_mli(
         filename,
         save_pic,
         save_dir,
@@ -71,7 +72,7 @@ def do_colocalization_analysis(
     save_table: bool = True,
     save_intermediate_images: bool = True,
     dpi: int = 450,
-    save_dir: str = "do_colocalization_analysis_output",
+    save_dir: str = "output",
 ):
 
     """
@@ -82,7 +83,7 @@ def do_colocalization_analysis(
     Output to console: results table (pd.DataFrame)
     """
 
-    ret = _colocalization_analysis._do_colocalization_analysis(
+    ret = _colocalization_analysis.do_colocalization_analysis(
         filename,
         nuc_seg_img_filename,
         use_cellpose,
@@ -93,6 +94,53 @@ def do_colocalization_analysis(
         save_intermediate_images,
         dpi,
         save_dir
+    )
+
+    console.print(
+        ret,
+        soft_wrap=True
+    )
+
+    return None
+
+
+@app.command()
+def do_kmeans_he_lung_injury_classification(
+    filename: str,
+    pretrained_model = None,
+    n_clusters: int = 4,
+    initial_means: list = None,
+    return_stats: bool = True,
+    save_fig: bool = True,
+    save_tiff: bool = True,
+    save_table: bool = True,
+    save_dir: str = "output",
+    dpi: int = 450,
+):
+
+    """
+    Given the filename of an H&E TIFF,
+    classify into background, unaffected,
+    somewhat affected, and severely affected
+    regions based on either a k-means color
+    classifier.
+
+    Output to console: results table (pd.DataFrame)
+    """
+
+    ret = _he_lung_injury_classification.do_kmeans_cluster_image(
+        img_path = filename,
+        pretrained_model = pretrained_model,
+        n_clusters = n_clusters,
+        initial_means = initial_means,
+        do_sparse = False,
+        channel_axis = 0,
+        return_stats = return_stats,
+        save_fig = save_fig,
+        save_tiff = save_tiff,
+        save_table = save_table,
+        save_dir = save_dir,
+        dpi = dpi
     )
 
     console.print(

@@ -37,20 +37,61 @@ def get_injury_img_filepath():
     return (
         os.path.join("tests", "data", "p601g_1b.tif"),
         os.path.join("tests", "data", "2549_1a.tif"),
+        os.path.join("tests", "data", "small_test_high_res.tif"),
+        os.path.join("tests", "data", "small_test_mid_res.tif"),
+        os.path.join("tests", "data", "small_test_low_res.tif"),
     )
-'''
+
 @pytest.fixture
 def train_kmeans_model(
-    get_data_dir,
-    n_clusters = 3,
-    n_jobs = 1
+    get_injury_img_filepath,
+    n_clusters = 4,
+    n_jobs = 1,
 ):
     return plm.make_kmeans_model_from_images(
-        get_data_dir, 
+        get_injury_img_filepath, 
         n_clusters=n_clusters, 
-        n_jobs=n_jobs
+        n_jobs=n_jobs,
+        do_sparse=False
     )
-'''
+
+@pytest.mark.skip(reason="currently in development")
+def test_apply_feature_based_random_forest_model(
+    get_injury_img_filepath,
+):
+    clf_model = plm.train_feature_based_random_forest_model(
+        get_injury_img_filepath[1], 
+        save_model=True
+    )
+    print(clf_model)
+    df_injured = plm.apply_feature_based_random_forest_model(
+       get_injury_img_filepath[1],
+       clf_model = clf_model,
+       save_tiffs = True,
+    )
+    df_healthy = plm.apply_feature_based_random_forest_model(
+       get_injury_img_filepath[0],
+       clf_model = None,
+    )
+    df_highres = plm.apply_feature_based_random_forest_model(
+       get_injury_img_filepath[2],
+       clf_model = clf_model,
+    )
+    df_midres = plm.apply_feature_based_random_forest_model(
+       get_injury_img_filepath[3],
+       clf_model = clf_model,
+    )
+    df_lowres = plm.apply_feature_based_random_forest_model(
+       get_injury_img_filepath[4],
+       clf_model = clf_model,
+    )
+
+    df = pd.concat([df_healthy, df_injured, df_highres, df_midres, df_lowres])
+
+    print(df.head())
+    assert len(df) == 5
+    assert len(df.columns) == 8
+
 
 def test_do_mli(
     get_mli_img_filepath
@@ -59,7 +100,7 @@ def test_do_mli(
 
     assert ((res > 5) and (res < 300))
 
-'''
+
 def test_make_kmeans_model_from_images(
     train_kmeans_model,
 ):
@@ -68,19 +109,21 @@ def test_make_kmeans_model_from_images(
     assert min(train_kmeans_model.labels_) > -1
 
 
-def test_cluster_image(
+def test_do_kmeans_cluster_image(
     get_injury_img_filepath,
     train_kmeans_model,
 ):
     #m = train_kmeans_model
-    clustered_healthy_img, df_healthy = plm.cluster_image(
-        get_injury_img_filepath[0],
-        pretrained_model = train_kmeans_model
-    )
-    clustered_injured_img, df_injured = plm.cluster_image(
+    clustered_healthy_img, df_healthy = plm.do_kmeans_cluster_image(
         get_injury_img_filepath[1],
+        pretrained_model = train_kmeans_model,
+        do_sparse = False,
+    )
+    clustered_injured_img, df_injured = plm.do_kmeans_cluster_image(
+        get_injury_img_filepath[0],
         pretrained_model = None,
-        n_clusters = 4
+        n_clusters = 3,
+        do_sparse = True
     )
 
     df = pd.concat([df_healthy, df_injured])
@@ -88,7 +131,7 @@ def test_cluster_image(
     print(df.head())
     assert len(df) == 2
     assert len(df.columns) > 1
-'''
+
 
 def test_do_colocalization_analysis(
     get_coloc_img_filepath,

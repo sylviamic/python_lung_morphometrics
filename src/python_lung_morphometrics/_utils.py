@@ -170,7 +170,6 @@ def _make_thresholded_images(
             res *= scale_factor 
         
         # adjust for under-exposure/under-saturation
-        #img = skimage.exposure.equalize_adapthist(img)
         grey_img = skimage.exposure.equalize_adapthist(grey_img)
 
         # otsu
