@@ -38,8 +38,10 @@ def _get_tiff_resolution(
                     # XResolution is a tuple (numerator, denominator)
                     # and is usually given in pixels per cm, not um
                     res = tag.value[0] / tag.value[1]
-                    res /= 1e4 #cm to um
-                    return res
+                    if (res/1e4 < 0.01):
+                        return res # already in um probably
+                    else:
+                        return res/1e4 # convert from cm to um
     if not res:
         raise ValueError("XResolution not found in tiff metadata.") 
 

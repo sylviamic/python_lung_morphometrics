@@ -4,7 +4,7 @@ Top-level package for python lung morphometrics.
 
 __author__ = """Sylvia N. Michki"""
 __email__ = 'sylvia.michki@gmail.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
 
 
 from ._do_mli import (

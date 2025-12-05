@@ -2,26 +2,19 @@
 Console script for python_lung_morphometrics.
 """
 
-#from ._do_mli import do_mli as _do_mli
-#from ._colocalization_analysis import do_colocalization_analysis as _do_colocalization_analysis
+from python_lung_morphometrics._do_mli import do_mli as _do_mli
+from python_lung_morphometrics._colocalization_analysis import do_colocalization_analysis as _do_colocalization_analysis
+from python_lung_morphometrics._he_lung_injury_classification import do_kmeans_cluster_image as _do_kmeans_cluster_image
 
-import _do_mli 
-import _colocalization_analysis
-import _he_lung_injury_classification
+#import ._do_mli 
+#import _colocalization_analysis
+#import _he_lung_injury_classification
 
 import typer
 from rich.console import Console
 
-app = typer.Typer()
+app = typer.Typer(no_args_is_help=True)
 console = Console()    
-
-@app.command()
-def main():
-    """
-    Dummy function.
-    """
-
-    console.print("dummy output")
 
 @app.command()
 def do_mli(
@@ -43,7 +36,7 @@ def do_mli(
     Output to console: `filename\t MLI(um)`
     """
 
-    ret = _do_mli.do_mli(
+    ret = _do_mli(
         filename,
         save_pic,
         save_dir,
@@ -83,7 +76,7 @@ def do_colocalization_analysis(
     Output to console: results table (pd.DataFrame)
     """
 
-    ret = _colocalization_analysis.do_colocalization_analysis(
+    ret = _do_colocalization_analysis(
         filename,
         nuc_seg_img_filename,
         use_cellpose,
@@ -103,13 +96,11 @@ def do_colocalization_analysis(
 
     return None
 
-
 @app.command()
 def do_kmeans_he_lung_injury_classification(
     filename: str,
     pretrained_model = None,
     n_clusters: int = 4,
-    initial_means: list = None,
     return_stats: bool = True,
     save_fig: bool = True,
     save_tiff: bool = True,
@@ -128,11 +119,10 @@ def do_kmeans_he_lung_injury_classification(
     Output to console: results table (pd.DataFrame)
     """
 
-    ret = _he_lung_injury_classification.do_kmeans_cluster_image(
+    ret = _do_kmeans_cluster_image(
         img_path = filename,
         pretrained_model = pretrained_model,
         n_clusters = n_clusters,
-        initial_means = initial_means,
         do_sparse = False,
         channel_axis = 0,
         return_stats = return_stats,
@@ -149,7 +139,6 @@ def do_kmeans_he_lung_injury_classification(
     )
 
     return None
-
 
 if __name__ == "__main__":
     app()

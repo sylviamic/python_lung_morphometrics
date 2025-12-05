@@ -77,7 +77,8 @@ def do_mli(
     res, orig_img, img, global_otsu = _make_thresholded_images(
         os.path.join(img_path, img_filename),
         max_image_length,
-        channel_axis = channel_axis
+        channel_axis = channel_axis,
+        greyscale = True,
     )
 
     if not (channel_axis):
@@ -233,7 +234,6 @@ def _make_chord_image(
         of the rescaled, thresholded H&E image
         containing chords.
     """
-
     chords = np.zeros_like(img, dtype=bool)
     i = pix_per_line
     while (i < chords.shape[0]):
