@@ -37,7 +37,7 @@ def get_coloc_mask_img_filepath():
 def get_injury_img_filepath():
     return (
         os.path.join("tests", "data", "p601g_1b_crop.tif"),
-        os.path.join("tests", "data", "2549_1a.tif"),
+        os.path.join("tests", "data", "2549_1a_crop.tif"),
         os.path.join("tests", "data", "small_test_high_res.tif"),
         os.path.join("tests", "data", "small_test_mid_res.tif"),
         os.path.join("tests", "data", "small_test_low_res.tif"),

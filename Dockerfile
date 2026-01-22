@@ -1,4 +1,4 @@
-FROM python:3.13.10
+FROM python:latest
 
 RUN \
 	git clone https://github.com/sylviamic/python_lung_morphometrics && \
