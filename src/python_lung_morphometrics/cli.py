@@ -64,6 +64,7 @@ def do_colocalization_analysis(
     nucleus_channel_idx: int = 0,
     save_table: bool = True,
     save_intermediate_images: bool = True,
+    signal_threshold_method: str = "otsu",
     dpi: int = 450,
     save_dir: str = "output",
 ):
@@ -85,6 +86,7 @@ def do_colocalization_analysis(
         nucleus_channel_idx,
         save_table, 
         save_intermediate_images,
+        signal_threshold_method,
         dpi,
         save_dir
     )

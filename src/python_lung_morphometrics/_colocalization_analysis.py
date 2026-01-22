@@ -14,9 +14,30 @@ try:
 except ImportError as e:
     print("cellpose library not found: " + str(e))
 
-def _threshold_signal(signal_img):
-    smooth = skimage.filters.gaussian(signal_img, sigma=1)
-    signal_thresh_img = smooth > skimage.filters.threshold_otsu(smooth)
+def _threshold_signal(
+    signal_img,
+    threshold_method = "otsu"
+):
+    smooth = skimage.filters.gaussian(signal_img, sigma=1.5)
+    if (threshold_method == "otsu"):
+        signal_thresh_img = smooth > skimage.filters.threshold_otsu(smooth)
+    elif (threshold_method == "multiotsu"):
+        p_low, p_high = np.percentile(smooth, (6.5, 93.5))
+        smooth = skimage.exposure.rescale_intensity(
+            smooth, 
+            in_range=(p_low, p_high)
+        )
+        thresholds = skimage.filters.threshold_multiotsu(smooth, classes=3)
+        signal_thresh_img = smooth > thresholds[-1]
+    elif (threshold_method == "savuola"):
+        window_size = int(np.max(smooth.shape)/9)
+        if (window_size % 2 == 0):
+            window_size = window_size + 1
+        signal_thresh_img = (
+            smooth > skimage.filters.threshold_sauvola(
+                smooth, window_size=window_size
+            )
+        )
     return signal_thresh_img
 
 def _threshold_nuclei(
@@ -61,7 +82,7 @@ def _segment_nuclei(nuc_thresh_img):
 
 def _expand_nucleus_seg(
     nuc_seg_img, 
-    expansion_factor=1.2
+    expansion_factor=1.5
 ):
     properties_to_measure = [
         "label",
@@ -76,7 +97,7 @@ def _expand_nucleus_seg(
     print(regionprops_df.columns)
     mean_effective_diameter = np.mean(regionprops_df["equivalent_diameter_area"])
     distance_to_expand = np.max(
-        [np.round((1.0 - expansion_factor) * 0.5 * mean_effective_diameter), 1]
+        [np.round((1-(1.0/expansion_factor)) * 0.5 * mean_effective_diameter), 1]
     )
 
     nuc_seg_expanded = skimage.segmentation.expand_labels(
@@ -129,6 +150,7 @@ def do_colocalization_analysis(
     nucleus_channel_idx=0,
     save_table=True,
     save_intermediate_images=True,
+    signal_threshold_method="otsu",
     dpi=450,
     save_dir="output"
 ):
@@ -172,6 +194,12 @@ def do_colocalization_analysis(
         Save an SVG file containing plots of the original signal intensities, 
         the thresholded channel values, and the nuclear segmentation overlaid
         atop the original signal. Very useful for QC.
+
+    signal_threshold_method: str (default: "otsu")
+        One of "otsu", "multiotsu", or "savuola". 
+        Use otsu for default global thresholding of fluorescence signal, 
+        "multiotsu" for 3-class thresholding (no sample, negative sample, 
+        positive sample), and "savuola" for local thresholding.
 
     dpi: int (default: 450)
         DPI of output images
@@ -244,7 +272,10 @@ def do_colocalization_analysis(
                 signal_thresh_img, 
                 axis=channel_axis, 
                 idx=i, 
-                vals=_threshold_signal(np.take(img, i, axis=channel_axis))
+                vals=_threshold_signal(
+                    np.take(img, i, axis=channel_axis),
+                    threshold_method=signal_threshold_method
+                )
             )
 
     df = _measure_signal_seg_overlap_with_nucleus_seg(
@@ -265,27 +296,28 @@ def do_colocalization_analysis(
         )
 
     if (save_intermediate_images):
-        figure_scale = 4
+        figure_scale = 3
         n_rows = 3
         n_cols = img.shape[channel_axis]
         cmap = plt.cm.Greys_r
-        figsize_x, figsize_y = 3*n_rows, n_cols*figure_scale
+        figsize_x, figsize_y = n_rows*figure_scale, n_cols*figure_scale
         fig, axs = plt.subplots(
             n_rows, n_cols,
             figsize=(figsize_x, figsize_y),
-            gridspec_kw = {"wspace": 0.05, "hspace": 0.05}
+            gridspec_kw = {"wspace": 0.02, "hspace": 0.01},
+            layout="compressed",
         )
         for i in range(0, n_rows):
             if (i == 0):
                 x = img
-                title = "intensity-channel-"
+                title = "intensity-chan-"
             elif (i == 1):
                 x = signal_thresh_img
-                title = "threshold-channel-"
+                title = "threshold-chan-"
             elif (i == 2):
                 x = img
                 y = nuc_seg_expanded_img
-                title = "segmented-channel-"
+                title = "segmented-chan-"
 
             for j in range(0, n_cols):
                 if (i == 2):
