@@ -14,6 +14,7 @@ steps:
         from_secret: dockerhub_auth_token
   - name: test
     image: sylviamic/python_lung_morphometrics:latest
+    pull: true
     commands:
       - echo "Testing ..."
       - cd /python_lung_morphometrics && make test
