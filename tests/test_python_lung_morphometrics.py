@@ -14,7 +14,7 @@ def get_data_dir():
 
 @pytest.fixture
 def get_mli_img_filepath():
-    return os.path.join("tests", "data", "20250506_20X_HE_13week_juvenile dosed_2.9-3.2e06CFU_2572_20X_2572_20X_small_crop.tif")
+    return os.path.join("tests", "data", "HE_20X_small_crop.tif")
     return os.path.join("tests", "data", "2086_20X_DISTAL6_ch00.TIFF")
 
 @pytest.fixture
@@ -36,7 +36,7 @@ def get_coloc_mask_img_filepath():
 @pytest.fixture
 def get_injury_img_filepath():
     return (
-        os.path.join("tests", "data", "p601g_1b.tif"),
+        os.path.join("tests", "data", "p601g_1b_crop.tif"),
         os.path.join("tests", "data", "2549_1a.tif"),
         os.path.join("tests", "data", "small_test_high_res.tif"),
         os.path.join("tests", "data", "small_test_mid_res.tif"),
