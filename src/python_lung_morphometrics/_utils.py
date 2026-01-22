@@ -113,7 +113,11 @@ def _make_thresholded_images(
     #img = np.moveaxis(img, 0, -1)
 
     # get the image metadata
-    res = _get_tiff_resolution(img_filename)
+    try:
+        res = _get_tiff_resolution(img_filename)
+    except ValueError:
+        print("XResolution not found; assuming 0.5 pixels/um")
+        res = 0.5
 
     # copy for plotting
     orig_img = img.copy()
