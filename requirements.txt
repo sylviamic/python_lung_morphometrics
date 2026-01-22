@@ -8,6 +8,7 @@ tifffile>=2025.2.18
 imagecodecs
 tqdm
 skops
+joblib<=1.5.2
 
 typer
 
