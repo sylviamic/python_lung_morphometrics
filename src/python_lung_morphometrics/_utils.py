@@ -31,6 +31,7 @@ def _get_tiff_resolution(
     """
 
     # get the image metadata
+    res = None
     with tifffile.TiffFile(img_filename) as tif:
         for page in tif.pages:
             for tag in page.tags:
